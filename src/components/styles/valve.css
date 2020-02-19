@@ -1,0 +1,14 @@
+.valve-img {
+    width: 100px;
+    height: 100px;
+    transform: rotate(-0.1turn);
+    transition: transform 1s;
+}
+
+.valve-container {
+    text-align: center;
+}
+
+.valve-img:hover {
+    transform: rotate(0.1turn);
+}

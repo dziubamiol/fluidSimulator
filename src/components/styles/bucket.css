@@ -1,0 +1,33 @@
+.bucket-container {
+
+}
+
+.bucket-img {
+    width: 300px;
+    margin: 0 auto 20px auto;
+    position: relative;
+}
+
+.bucket-img > img {
+    width: 300px;
+}
+
+.bucket-water {
+    position: absolute;
+    bottom: 0;
+
+    /*height: 350px - max 265-shutoff 45-critical 0 - failure*/
+
+    width: 100%;
+    margin-bottom: 120px;
+    transition: height .2s;
+
+    z-index: -1;
+
+    background-color: #C2F6FF;
+}
+
+.bucket-parameters {
+    width: 300px;
+    margin: auto;
+}
