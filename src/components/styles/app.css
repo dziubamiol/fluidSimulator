@@ -2,5 +2,19 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
 
-    padding: 50px;
+    padding: 30px 10% 0 10%;
+}
+
+.buckets-container > div:nth-child(odd) {
+    margin-left: auto;
+    padding-right: 5px;
+}
+
+.buckets-container > div:nth-child(even) {
+    margin-right: auto;
+    padding-left: 5px;
+}
+
+.main-grid {
+    padding: 20px;
 }

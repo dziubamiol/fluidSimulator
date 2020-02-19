@@ -1,0 +1,7 @@
+.bordered-container {
+    border: 1px solid;
+    max-width: 600px;
+    margin: 15px auto;
+    padding: 15px 30px;
+    border-radius: 5px;
+}

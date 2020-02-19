@@ -1,5 +1,5 @@
 .bucket-container {
-
+    width: 300px;
 }
 
 .bucket-img {
@@ -27,7 +27,19 @@
     background-color: #C2F6FF;
 }
 
-.bucket-parameters {
+.bucket-parameters-wrapper {
     width: 300px;
     margin: auto;
+}
+
+.bucket-parameters > div {
+    margin-bottom: 20px;
+}
+
+.bucket-parameters > hr {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    background-color: #00000047;
+    border: none;
+    height: 1px;
 }

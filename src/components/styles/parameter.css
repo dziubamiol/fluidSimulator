@@ -1,0 +1,8 @@
+.parameter-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    max-width: 600px;
+    margin: auto;
+    height: 85px;
+    align-items: end;
+}
