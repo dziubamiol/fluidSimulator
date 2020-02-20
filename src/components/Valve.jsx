@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './styles/valve.css';
 
+
 class Valve extends Component {
     render() {
         return (
@@ -14,5 +15,6 @@ class Valve extends Component {
         );
     }
 }
+
 
 export default Valve;

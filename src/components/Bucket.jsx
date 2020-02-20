@@ -1,12 +1,16 @@
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './styles/bucket.css';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
+
 
 class Bucket extends Component {
     render() {
+        const parametersHandler = this.props.parametersHandler;
+        console.log(parametersHandler);
+
         return (
             <div className='bucket-container'>
                 <div className='bucket-img'>
@@ -28,10 +32,10 @@ class Bucket extends Component {
                                 <TextField
                                     label='Maximum Level'
                                     name='maxLevel'
-                                    defaultValue='30'
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                                 <TextField
                                     label='Shutoff Level'
@@ -40,6 +44,7 @@ class Bucket extends Component {
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                                 <TextField
                                     label='Critical Level'
@@ -48,6 +53,7 @@ class Bucket extends Component {
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                                 <TextField
                                     label='Minimum Level'
@@ -56,6 +62,7 @@ class Bucket extends Component {
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                                 <hr />
                                 <TextField
@@ -65,6 +72,7 @@ class Bucket extends Component {
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                                 <TextField
                                     label='Bucket Radius'
@@ -73,6 +81,7 @@ class Bucket extends Component {
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                                 <TextField
                                     label='Outlet Radius'
@@ -81,6 +90,7 @@ class Bucket extends Component {
                                     fullWidth
                                     variant='outlined'
                                     size='small'
+                                    onChange={parametersHandler}
                                 />
                             </div>
                         </ExpansionPanelDetails>

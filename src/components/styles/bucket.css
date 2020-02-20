@@ -16,6 +16,8 @@
     position: absolute;
     bottom: 0;
 
+    height: 0;
+
     /*height: 350px - max 265-shutoff 45-critical 0 - failure*/
 
     width: 100%;

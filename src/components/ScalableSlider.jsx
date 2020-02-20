@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Slider from '@material-ui/core/Slider';
 
+
 class ScalableSlider extends Component {
     render() {
         const marks = [
@@ -26,11 +27,10 @@ class ScalableSlider extends Component {
 
         return (
             <Slider
-                defaultValue={scaleValue(this.props.defaultValue)}
                 value={scaleValue(this.props.value)}
                 step={this.props.step}
                 valueLabelDisplay={this.props.valueLabelDisplay}
-                valueLabelFormat={this.props.value}
+                valueLabelFormat={() => this.props.value}
                 marks={this.props.marks && marks}
             />
         );
