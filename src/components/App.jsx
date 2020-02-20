@@ -55,18 +55,24 @@ class App extends Component {
                 shutLevel: 25,
                 critLevel: 5,
                 minLevel: 2,
-                inletR: 2,
-                buckR: 8,
+                inletR: 8,
+                buckR: 2,
                 outletR: 3,
+                currentLevel: 10,
+                inletSpeed: 3,
+                outletSpeed: 3,
             },
             2: {
                 maxLevel: 30,
                 shutLevel: 25,
                 critLevel: 5,
                 minLevel: 2,
-                inletR: 2,
-                buckR: 8,
+                inletR: 8,
+                buckR: 2,
                 outletR: 3,
+                currentLevel: 10,
+                inletSpeed: 3,
+                outletSpeed: 3,
             }
         };
 

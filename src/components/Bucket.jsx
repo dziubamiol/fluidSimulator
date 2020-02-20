@@ -60,6 +60,15 @@ class Bucket extends Component {
                         <ExpansionPanelDetails>
                             <div className='bucket-parameters'>
                                 <TextField
+                                    label='Current level'
+                                    value={bucketSettings.maxLevel}
+                                    name='currentLevel'
+                                    fullWidth
+                                    variant='outlined'
+                                    size='small'
+                                    onChange={parametersHandler}
+                                />
+                                <TextField
                                     label='Maximum Level'
                                     value={bucketSettings.maxLevel}
                                     name='maxLevel'
@@ -106,6 +115,15 @@ class Bucket extends Component {
                                     onChange={parametersHandler}
                                 />
                                 <TextField
+                                    label='Inlet Speed'
+                                    name='inletSpeed'
+                                    value={bucketSettings.inletSpeed}
+                                    fullWidth
+                                    variant='outlined'
+                                    size='small'
+                                    onChange={parametersHandler}
+                                />
+                                <TextField
                                     label='Bucket Radius'
                                     name='buckR'
                                     value={bucketSettings.buckR}
@@ -118,6 +136,15 @@ class Bucket extends Component {
                                     label='Outlet Radius'
                                     name='outletR'
                                     value={bucketSettings.outletR}
+                                    fullWidth
+                                    variant='outlined'
+                                    size='small'
+                                    onChange={parametersHandler}
+                                />
+                                <TextField
+                                    label='Outlet Speed'
+                                    name='outletSpeed'
+                                    value={bucketSettings.outletSpeed}
                                     fullWidth
                                     variant='outlined'
                                     size='small'
