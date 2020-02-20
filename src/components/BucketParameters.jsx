@@ -25,7 +25,7 @@ class BucketParameters extends Component {
                     minValue={fluidLevel.min}
                     maxValue={fluidLevel.max}
                     value={fluidLevel.value}
-                    valueDescription='L/S'
+                    valueDescription='L'
                 />
                 <Parameter
                     title={`Bucket #${this.props.id} LVL TREND`}

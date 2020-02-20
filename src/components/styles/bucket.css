@@ -45,3 +45,11 @@
     border: none;
     height: 1px;
 }
+
+.level-constraints {
+    width: 300px;
+    position: absolute;
+    left: 0;
+    bottom: 120px;
+    transition: bottom .2s;
+}

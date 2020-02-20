@@ -9,16 +9,46 @@ import './styles/bucket.css';
 class Bucket extends Component {
     render() {
         const parametersHandler = this.props.parametersHandler;
-        console.log(parametersHandler);
+        const bucketParameters = this.props.bucketParameters;
+        const bucketSettings = this.props.bucketsSettings;
+
+        const fluidLevel = bucketParameters.fluidLevel;
+        const shutLevel = bucketSettings.shutLevel;
+        const critLevel = bucketSettings.critLevel;
+        const maxLevel = bucketSettings.maxLevel;
+        const minLevel = bucketSettings.minLevel;
+
+        const scaleValue = (value, min, max) => (value - min) / (max - min) * 350;
+
 
         return (
             <div className='bucket-container'>
                 <div className='bucket-img'>
                     <img
-                        src={'/bucket.svg'}
+                        src={'/bucket.svg?v=1.0'}
                         alt='Nothing to show'
                     />
-                    <div className='bucket-water' />
+                    <div className='bucket-water'
+                        style={{
+                            height: `${scaleValue(fluidLevel.value, fluidLevel.min, fluidLevel.max)}px`
+                        }}
+                    />
+                    <img
+                        src={'/shutLevel.svg'}
+                        alt='Nothing to show'
+                        className='level-constraints'
+                        style={{
+                            bottom: `${scaleValue(shutLevel, minLevel, maxLevel) + 120}px`
+                        }}
+                    />
+                    <img
+                        src={'/critLevel.svg'}
+                        alt='Nothing to show'
+                        className='level-constraints'
+                        style={{
+                            bottom: `${scaleValue(critLevel, minLevel, maxLevel) + 120}px`
+                        }}
+                    />
                 </div>
                 <div className='bucket-parameters-wrapper'>
                     <ExpansionPanel>
@@ -31,6 +61,7 @@ class Bucket extends Component {
                             <div className='bucket-parameters'>
                                 <TextField
                                     label='Maximum Level'
+                                    value={bucketSettings.maxLevel}
                                     name='maxLevel'
                                     fullWidth
                                     variant='outlined'
@@ -40,7 +71,7 @@ class Bucket extends Component {
                                 <TextField
                                     label='Shutoff Level'
                                     name='shutLevel'
-                                    defaultValue='25'
+                                    value={bucketSettings.shutLevel}
                                     fullWidth
                                     variant='outlined'
                                     size='small'
@@ -49,7 +80,7 @@ class Bucket extends Component {
                                 <TextField
                                     label='Critical Level'
                                     name='critLevel'
-                                    defaultValue='5'
+                                    value={bucketSettings.critLevel}
                                     fullWidth
                                     variant='outlined'
                                     size='small'
@@ -58,7 +89,7 @@ class Bucket extends Component {
                                 <TextField
                                     label='Minimum Level'
                                     name='minLevel'
-                                    defaultValue='2'
+                                    value={bucketSettings.minLevel}
                                     fullWidth
                                     variant='outlined'
                                     size='small'
@@ -68,7 +99,7 @@ class Bucket extends Component {
                                 <TextField
                                     label='Inlet Radius'
                                     name='inletR'
-                                    defaultValue='2'
+                                    value={bucketSettings.inletR}
                                     fullWidth
                                     variant='outlined'
                                     size='small'
@@ -77,7 +108,7 @@ class Bucket extends Component {
                                 <TextField
                                     label='Bucket Radius'
                                     name='buckR'
-                                    defaultValue='8'
+                                    value={bucketSettings.buckR}
                                     fullWidth
                                     variant='outlined'
                                     size='small'
@@ -86,7 +117,7 @@ class Bucket extends Component {
                                 <TextField
                                     label='Outlet Radius'
                                     name='outletR'
-                                    defaultValue='3'
+                                    value={bucketSettings.outletR}
                                     fullWidth
                                     variant='outlined'
                                     size='small'

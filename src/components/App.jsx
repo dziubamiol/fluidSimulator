@@ -36,7 +36,7 @@ class App extends Component {
                 },
                 fluidLevel: {
                     min: 0,
-                    max: 15,
+                    max: 30,
                     value: 7.30
                 },
                 fluidLevelTrend: {
@@ -86,9 +86,8 @@ class App extends Component {
 
         this.setState((prevState) => {
             const oldBucketsSettings = Object.assign({}, prevState.bucketsSettings);
-            console.log(bucketID, parameterName, value);
 
-            oldBucketsSettings[bucketID][parameterName] = parseFloat(value);
+            oldBucketsSettings[bucketID][parameterName] = value ? parseFloat(value) : '';
 
             return {
                 bucketsSettings: oldBucketsSettings
@@ -121,10 +120,14 @@ class App extends Component {
                         <Bucket
                             id='1'
                             parametersHandler={this.bucketParametersHandler.bind(this, '1')}
+                            bucketParameters={this.state.bucketsParameters[1]}
+                            bucketsSettings={this.state.bucketsSettings[1]}
                         />
                         <Bucket
                             id='2'
                             parametersHandler={this.bucketParametersHandler.bind(this, '2')}
+                            bucketParameters={this.state.bucketsParameters[2]}
+                            bucketsSettings={this.state.bucketsSettings[2]}
                         />
                     </div>
                 </div>
