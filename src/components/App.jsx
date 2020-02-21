@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Bucket from './Bucket';
 import Valve from './Valve';
 import ParametersViewer from './ParametersViewer';
+import FluidController from './../utils/fluidController';
 import './styles/app.css';
 
 
@@ -48,6 +49,8 @@ class App extends Component {
         };
         /*STUB DATA END*/
 
+        this._valve = new FluidController.Valve(100, 200, (position) => this.valveParametersHandler(position));
+
         /*CONFIG DATA START*/
         const bucketsSettings = {
             1: {
@@ -55,26 +58,33 @@ class App extends Component {
                 shutLevel: 25,
                 critLevel: 5,
                 minLevel: 2,
-                inletR: 8,
+                inletR: 5,
                 buckR: 2,
                 outletR: 3,
                 currentLevel: 10,
                 inletSpeed: 3,
                 outletSpeed: 3,
+                fluidController: this._valve
             },
             2: {
                 maxLevel: 30,
                 shutLevel: 25,
                 critLevel: 5,
                 minLevel: 2,
-                inletR: 8,
+                inletR: 5,
                 buckR: 2,
                 outletR: 3,
                 currentLevel: 10,
                 inletSpeed: 3,
                 outletSpeed: 3,
+                fluidController: this._valve
             }
         };
+
+        this._bucket_1 = new FluidController.Bucket('1', bucketsSettings[1], (params) => this.bucketHandler(params));
+        this._valve.add(this._bucket_1);
+        this._bucket_2 = new FluidController.Bucket('2', bucketsSettings[2], (params) => this.bucketHandler(params));
+        this._valve.add(this._bucket_2);
 
         this.state = {
             valvePosition: 0, // 0-180
@@ -103,9 +113,34 @@ class App extends Component {
 
     valveHandler() {
         this.setState((prevState) => {
+
+            if (!prevState.isRunning) {
+                this._valve.start(10);
+            } else {
+                this._valve.stop();
+            }
+
             return {
                 isRunning: !prevState.isRunning,
             }
+        });
+    }
+
+    valveParametersHandler(valvePosition) {
+        this.setState({
+            valvePosition: valvePosition
+        });
+    }
+
+    bucketHandler(bucketParameters) {
+        this.setState((prevState) => {
+            const oldBucketsParameters = prevState.bucketsParameters;
+
+            oldBucketsParameters[bucketParameters.id] = bucketParameters.parameters;
+
+            return {
+                bucketsParameters: oldBucketsParameters
+            };
         });
     }
 

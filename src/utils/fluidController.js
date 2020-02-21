@@ -1,7 +1,11 @@
 class Valve {
-    constructor(...buckets) {
+    constructor(T_1, T_2, watcher, ...buckets) {
         this.buckets = buckets;
         this.valvePosition = 0;
+        this.switchTimeout = [T_1, T_2];
+        this._watcher = watcher;
+
+        this.events = [];
     }
 
     get totalBuckets() {
@@ -9,9 +13,62 @@ class Valve {
     }
 
     sendEvent(sender, event) {
+        this.events.push({
+            sender: this.buckets.indexOf(sender),
+            event: event,
+        });
+    }
+
+    switchValve(target) {
+        setTimeout(() => this.valvePosition = target, this.switchTimeout[target]);
     }
 
     calculate(tickTime) {
+        if (this.events.length > 0) {
+            const event = this.events.shift();
+
+            if (event.event === 'fill') {
+                if (this.valvePosition !== event.sender) {
+                    this.switchValve(event.sender);
+                }
+            } else if (event.event === 'stop') {
+                if (this.valvePosition === event.sender) {
+                    this.switchValve((this.valvePosition + 1) % this.totalBuckets)
+                }
+            } else if (event.event === 'emergency') {
+                if (this.valvePosition !== event.sender) {
+                    this.valvePosition = event.sender;
+                }
+            }
+        }
+
+        for (let [index, bucket] of this.buckets.entries()) {
+            bucket.timeDelta = tickTime;
+            bucket.fluidController();
+
+            if (this.valvePosition === index) {
+                bucket.fill();
+            } else {
+                bucket.stopFilling();
+            }
+
+            this._watcher(this.valvePosition);
+        }
+    }
+
+    start(tickTime) {
+        if (!this._timeoutID) {
+            console.log('started');
+            this._timeoutID = setInterval(() => this.calculate(tickTime), tickTime);
+        }
+    }
+
+    stop() {
+        if (this._timeoutID) {
+            console.log('stopped');
+            clearInterval(this._timeoutID);
+            delete this._timeoutID;
+        }
     }
 
     add(bucket) {
@@ -21,7 +78,7 @@ class Valve {
 
 
 class Bucket {
-    constructor(parameters) {
+    constructor(id, parameters, watcher) {
         this._currentLevel = parameters.currentLevel;
         this._maxLevel = parameters.maxLevel;
         this._shutLevel = parameters.shutLevel;
@@ -31,6 +88,8 @@ class Bucket {
         this._outletRadius = parameters.outletR;
         this._bucketRadius = parameters.buckR;
         this._fluidController = parameters.fluidController;
+        this._watcher = watcher;
+        this._id = id;
 
         this._currentVolume = this._currentLevel;
         this._isFilling = false;
@@ -38,27 +97,33 @@ class Bucket {
         this._inVolume = parameters.inletSpeed * 2 * Math.PI * this._inletRadius ** 2;
         this._outVolume = parameters.outletSpeed * 2 * Math.PI * this._outletRadius ** 2;
 
-        if (this._inVolume - this._outVolume < 0) {} // todo add solver for invalid scheme
+        if (this._inVolume - this._outVolume < 0) {
+        } // todo add solver for invalid scheme
+    }
 
-
+    set timeDelta(timeDelta) {
+        this._timeDelta = timeDelta / 1000;
     }
 
     get currentParameters() {
         return {
-            fluidFlow: {
-                min: 0,
-                max: this._inVolume,
-                value: this._inVolume * this._isFilling,
-            },
-            fluidLevel: {
-                min: this._minLevel,
-                max: this._maxLevel,
-                value: this.currentLevel,
-            },
-            fluidLevelTrend: {
-                min: this._outVolume,
-                max: this._inVolume - this._outVolume,
-                value: this._inVolume * this._isFilling - this._outVolume,
+            id: this._id,
+            parameters: {
+                fluidFlow: {
+                    min: 0,
+                    max: parseFloat(this._inVolume.toFixed(1)),
+                    value: parseFloat((this._inVolume * this._isFilling * this._timeDelta).toFixed(2)),
+                },
+                fluidLevel: {
+                    min: parseFloat(this._minLevel.toFixed(1)),
+                    max: parseFloat(this._maxLevel.toFixed(1)),
+                    value: parseFloat(this.currentLevel.toFixed(1)),
+                },
+                fluidLevelTrend: {
+                    min: parseFloat((-this._outVolume).toFixed(1)),
+                    max: parseFloat((this._inVolume - this._outVolume).toFixed(1)),
+                    value: parseFloat((this._inVolume * this._isFilling * this._timeDelta - this._outVolume).toFixed(1)),
+                }
             }
         }
     }
@@ -68,7 +133,7 @@ class Bucket {
     }
 
     fill() {
-        this._currentVolume += this._inVolume;
+        this._currentVolume += this._inVolume * this._timeDelta;
         this._isFilling = true;
     }
 
@@ -77,10 +142,25 @@ class Bucket {
     }
 
     fluidController() {
-        this._currentVolume -= this._outVolume;
+        this._currentVolume -= this._outVolume * this._timeDelta;
+
+        if (this.currentLevel > this._shutLevel && this._isFilling) {
+            this._fluidController.sendEvent(this, 'stop');
+        }
+
+        if (this.currentLevel < this._shutLevel && !this._isFilling) {
+            this._fluidController.sendEvent(this, 'fill');
+        }
+
+        if (this.currentLevel <= this._critLevel && !this._isFilling) {
+            this._fluidController.sendEvent(this, 'emergency');
+        }
+
+        this._watcher(this.currentParameters);
     }
 
 }
+
 
 export default {
     Valve,
