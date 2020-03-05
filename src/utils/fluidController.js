@@ -1,4 +1,5 @@
 class Valve {
+    _timeout;
     constructor(T_1, T_2, watcher, ...buckets) {
         this.buckets = buckets;
         this.valvePosition = 0;
@@ -20,7 +21,10 @@ class Valve {
     }
 
     switchValve(target) {
-        setTimeout(() => this.valvePosition = target, this.switchTimeout[target]);
+        if (this._timeout) {
+            clearTimeout(this._timeout)
+        }
+        this._timeout = setTimeout(() => this.valvePosition = target, this.switchTimeout[target]);
     }
 
     calculate(tickTime) {
@@ -33,7 +37,8 @@ class Valve {
                 }
             } else if (event.event === 'stop') {
                 if (this.valvePosition === event.sender) {
-                    this.switchValve((this.valvePosition + 1) % this.totalBuckets)
+                    this.valvePosition = -1;
+                    // this.switchValve((this.valvePosition + 1) % this.totalBuckets)
                 }
             } else if (event.event === 'emergency') {
                 if (this.valvePosition !== event.sender) {
@@ -90,6 +95,8 @@ class Bucket {
         this._fluidController = parameters.fluidController;
         this._watcher = watcher;
         this._id = id;
+        this._timeToStart = parameters.timeToStart;
+        this._timeToStartAnother = parameters.timeToStartAnother;
 
         this._currentVolume = this._currentLevel;
         this._isFilling = false;
@@ -144,21 +151,34 @@ class Bucket {
     fluidController() {
         this._currentVolume -= this._outVolume * this._timeDelta;
 
-        if (this.currentLevel > this._shutLevel && this._isFilling) {
-            this._fluidController.sendEvent(this, 'stop');
-        }
+        const event = this.makeEvent();
 
-        if (this.currentLevel < this._shutLevel && !this._isFilling) {
-            this._fluidController.sendEvent(this, 'fill');
-        }
-
-        if (this.currentLevel <= this._critLevel && !this._isFilling) {
-            this._fluidController.sendEvent(this, 'emergency');
+        if (event) {
+            console.log(this._id, event);
+            this._fluidController.sendEvent(this, event);
         }
 
         this._watcher(this.currentParameters);
     }
 
+    makeEvent() {
+        if (this.currentLevel <= this._critLevel && !this._isFilling) {
+            return 'emergency'
+        }
+        if (this._isFilling) {
+            const futureLevelIfDontStop = this._currentVolume + this._inVolume * (this._timeToStart / 1000 + this._timeDelta);
+            if (futureLevelIfDontStop > this._maxLevel) {
+                return 'stop'
+            }
+        }
+        if (!this._isFilling) {
+            const futureLevelIfDontStart = this._currentVolume - this._outVolume * (this._timeToStartAnother / 1000 + this._timeDelta);
+            if (futureLevelIfDontStart < this._minLevel) {
+                return 'fill'
+            }
+        }
+
+    }
 }
 
 
