@@ -22,7 +22,7 @@
 
     width: 100%;
     margin-bottom: 120px;
-    transition: height .2s;
+    /*transition: height 5ms;*/
 
     z-index: -1;
 

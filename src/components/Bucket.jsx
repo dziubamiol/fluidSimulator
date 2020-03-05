@@ -20,6 +20,7 @@ class Bucket extends Component {
 
         const scaleValue = (value, min, max) => (value - min) / (max - min) * 350;
 
+        /*console.log(`${this.props.id}, height ${scaleValue(fluidLevel.value, fluidLevel.min, fluidLevel.max)}`);*/
 
         return (
             <div className='bucket-container'>

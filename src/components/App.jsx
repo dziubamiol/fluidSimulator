@@ -134,7 +134,7 @@ class App extends Component {
 
     bucketHandler(bucketParameters) {
         this.setState((prevState) => {
-            const oldBucketsParameters = prevState.bucketsParameters;
+            const { ...oldBucketsParameters } = prevState.bucketsParameters;
 
             oldBucketsParameters[bucketParameters.id] = bucketParameters.parameters;
 
