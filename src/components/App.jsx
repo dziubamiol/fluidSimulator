@@ -113,6 +113,8 @@ class App extends Component {
 
             oldBucketsSettings[bucketID][parameterName] = value ? parseFloat(value) : '';
 
+            this[`_bucket_${bucketID}`] = new FluidController.Bucket(bucketID, oldBucketsSettings[bucketID], (params) => this.bucketHandler(params));
+
             return {
                 bucketsSettings: oldBucketsSettings
             }

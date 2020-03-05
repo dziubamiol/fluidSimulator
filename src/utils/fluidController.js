@@ -99,7 +99,7 @@ class Bucket {
         this._timeToStart = parameters.timeToStart;
         this._timeToStartAnother = parameters.timeToStartAnother;
 
-        this._currentVolume = this._currentLevel * 2 * Math.PI * this._bucketRadius;
+        this._currentVolume = this._currentLevel * 2 * Math.PI * this._bucketRadius ** 2;
         this._isFilling = false;
 
         this._inVolume = parameters.inletSpeed * 2 * Math.PI * this._inletRadius ** 2;
