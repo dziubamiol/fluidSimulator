@@ -21,9 +21,6 @@ class Valve {
     }
 
     switchValve(target) {
-        if (this._timeout) {
-            clearTimeout(this._timeout)
-        }
         this._timeout = setTimeout(() => this.valvePosition = target, this.switchTimeout[target]);
     }
 
@@ -37,8 +34,7 @@ class Valve {
                 }
             } else if (event.event === 'stop') {
                 if (this.valvePosition === event.sender) {
-                    this.valvePosition = -1;
-                    // this.switchValve((this.valvePosition + 1) % this.totalBuckets)
+                    this.switchValve(-1)
                 }
             } else if (event.event === 'emergency') {
                 if (this.valvePosition !== event.sender) {
@@ -167,14 +163,15 @@ class Bucket {
             return 'emergency'
         }
         if (this._isFilling) {
-            const futureLevelIfDontStop = this._currentVolume + this._inVolume * (this._timeToStart / 1000 + this._timeDelta);
-            if (futureLevelIfDontStop > this._maxLevel) {
+            const futureLevelIfDontStop = (this._currentVolume + this._inVolume * (this._timeToStart / 1000 + this._timeDelta)) / (2 * Math.PI * this._bucketRadius ** 2);
+            if (futureLevelIfDontStop > this._shutLevel) {
                 return 'stop'
             }
         }
         if (!this._isFilling) {
-            const futureLevelIfDontStart = this._currentVolume - this._outVolume * (this._timeToStartAnother / 1000 + this._timeDelta);
-            if (futureLevelIfDontStart < this._minLevel) {
+            const futureLevelIfDontStart = (this._currentVolume - this._outVolume * (this._timeToStartAnother / 1000 + this._timeDelta)) / (2 * Math.PI * this._bucketRadius ** 2);
+            console.log(futureLevelIfDontStart);
+            if (futureLevelIfDontStart < this._critLevel) {
                 return 'fill'
             }
         }
