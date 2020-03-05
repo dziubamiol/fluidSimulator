@@ -16,34 +16,34 @@ class App extends Component {
                 fluidFlow: {
                     min: 0,
                     max: 20,
-                    value: 3.21
+                    value: 0
                 },
                 fluidLevel: {
                     min: 0,
                     max: 30,
-                    value: 12.45
+                    value: 0
                 },
                 fluidLevelTrend: {
                     min: -7,
                     max: 7,
-                    value: -3.56
+                    value: 0
                 }
             },
             2: {
                 fluidFlow: {
                     min: 0,
                     max: 10,
-                    value: 3.21
+                    value: 0
                 },
                 fluidLevel: {
                     min: 0,
                     max: 30,
-                    value: 7.30
+                    value: 0
                 },
                 fluidLevelTrend: {
                     min: -2,
                     max: 3,
-                    value: 1.33
+                    value: 0
                 }
             }
         };
@@ -109,7 +109,7 @@ class App extends Component {
         const value = event.target.value;
 
         this.setState((prevState) => {
-            const oldBucketsSettings = Object.assign({}, prevState.bucketsSettings);
+            const { ...oldBucketsSettings } = prevState.bucketsSettings;
 
             oldBucketsSettings[bucketID][parameterName] = value ? parseFloat(value) : '';
 

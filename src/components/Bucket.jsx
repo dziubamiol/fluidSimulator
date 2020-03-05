@@ -62,7 +62,7 @@ class Bucket extends Component {
                             <div className='bucket-parameters'>
                                 <TextField
                                     label='Current level'
-                                    value={bucketSettings.maxLevel}
+                                    value={bucketSettings.currentLevel}
                                     name='currentLevel'
                                     fullWidth
                                     variant='outlined'

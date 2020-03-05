@@ -84,6 +84,7 @@ class Valve {
 
 class Bucket {
     constructor(id, parameters, watcher) {
+        console.log(parameters);
         this._currentLevel = parameters.currentLevel;
         this._maxLevel = parameters.maxLevel;
         this._shutLevel = parameters.shutLevel;
