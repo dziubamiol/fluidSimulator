@@ -10,7 +10,7 @@ class ParametersViewer extends Component {
         return (
             <div className='parameters-container'>
                 <ValveParameter
-                    valvePosition={this.props.valvePosition}
+                    valvePosition={this.props.valvePosition * 100}
                 />
                 <BucketParameters
                     id='1'
