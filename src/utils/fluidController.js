@@ -90,6 +90,8 @@ class Bucket {
         this._fluidController = parameters.fluidController;
         this._watcher = watcher;
         this._id = id;
+        this._timeToStart = parameters.timeToStart;
+        this._timeToStartAnother = parameters.timeToStartAnother;
 
         this._currentVolume = this._currentLevel;
         this._isFilling = false;
@@ -117,7 +119,7 @@ class Bucket {
                 fluidLevel: {
                     min: parseFloat(this._minLevel.toFixed(1)),
                     max: parseFloat(this._maxLevel.toFixed(1)),
-                    value: parseFloat(this.currentLevel.toFixed(1)),
+                    value: parseFloat(this._currentLevel.toFixed(1)),
                 },
                 fluidLevelTrend: {
                     min: parseFloat((-this._outVolume).toFixed(1)),
@@ -144,21 +146,29 @@ class Bucket {
     fluidController() {
         this._currentVolume -= this._outVolume * this._timeDelta;
 
-        if (this.currentLevel > this._shutLevel && this._isFilling) {
-            this._fluidController.sendEvent(this, 'stop');
-        }
-
-        if (this.currentLevel < this._shutLevel && !this._isFilling) {
-            this._fluidController.sendEvent(this, 'fill');
-        }
-
-        if (this.currentLevel <= this._critLevel && !this._isFilling) {
-            this._fluidController.sendEvent(this, 'emergency');
-        }
+        this._fluidController.sendEvent(this, this.makeEvent());
 
         this._watcher(this.currentParameters);
     }
 
+    makeEvent() {
+        if (this._currentLevel <= this._critLevel && !this._isFilling) {
+            return 'emergency'
+        }
+        if (this._isFilling) {
+            const futureLevelIfDontStop = this._currentLevel + this._inVolume * (this._timeToStart + this._timeDelta);
+            if (futureLevelIfDontStop > this._shutLevel) {
+                return 'stop'
+            }
+        }
+        if (!this._isFilling) {
+            const futureLevelIfDontStart = this._currentLevel - this._outVolume * (this._timeToStartAnother + this._timeDelta);
+            if (futureLevelIfDontStart < this._critLevel) {
+                return 'fill'
+            }
+        }
+
+    }
 }
 
 

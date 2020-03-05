@@ -52,8 +52,13 @@ class App extends Component {
         this._valve = new FluidController.Valve(100, 200, (position) => this.valveParametersHandler(position));
 
         /*CONFIG DATA START*/
+        const firstBucketChangeTime = 100;
+        const secondBucketChangeTime = 200;
+
         const bucketsSettings = {
             1: {
+                timeToStart: firstBucketChangeTime,
+                timeToStartAnother: secondBucketChangeTime,
                 maxLevel: 30,
                 shutLevel: 25,
                 critLevel: 5,
@@ -67,6 +72,8 @@ class App extends Component {
                 fluidController: this._valve
             },
             2: {
+                timeToStartAnother: firstBucketChangeTime,
+                timeToStart: secondBucketChangeTime,
                 maxLevel: 30,
                 shutLevel: 25,
                 critLevel: 5,
