@@ -49,24 +49,25 @@ class App extends Component {
         };
         /*STUB DATA END*/
 
-        this._valve = new FluidController.Valve(100, 200, (position) => this.valveParametersHandler(position));
-
-        /*CONFIG DATA START*/
         const firstBucketChangeTime = 100;
         const secondBucketChangeTime = 200;
+
+        this._valve = new FluidController.Valve(firstBucketChangeTime, secondBucketChangeTime, (position) => this.valveParametersHandler(position));
+
+        /*CONFIG DATA START*/
 
         const bucketsSettings = {
             1: {
                 timeToStart: firstBucketChangeTime,
                 timeToStartAnother: secondBucketChangeTime,
-                maxLevel: 30,
-                shutLevel: 25,
+                maxLevel: 300,
+                shutLevel: 250,
                 critLevel: 5,
                 minLevel: 2,
                 inletR: 5,
                 buckR: 2,
                 outletR: 3,
-                currentLevel: 10,
+                currentLevel: 150,
                 inletSpeed: 3,
                 outletSpeed: 3,
                 fluidController: this._valve
@@ -74,15 +75,15 @@ class App extends Component {
             2: {
                 timeToStartAnother: firstBucketChangeTime,
                 timeToStart: secondBucketChangeTime,
-                maxLevel: 30,
-                shutLevel: 25,
+                maxLevel: 300,
+                shutLevel: 250,
                 critLevel: 5,
                 minLevel: 2,
                 inletR: 5,
                 buckR: 2,
                 outletR: 3,
-                currentLevel: 10,
-                inletSpeed: 3,
+                currentLevel: 90,
+                inletSpeed: 5,
                 outletSpeed: 3,
                 fluidController: this._valve
             }
@@ -122,7 +123,7 @@ class App extends Component {
         this.setState((prevState) => {
 
             if (!prevState.isRunning) {
-                this._valve.start(10);
+                this._valve.start(100);
             } else {
                 this._valve.stop();
             }
